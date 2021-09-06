@@ -3,21 +3,22 @@ FROM remote-host
 COPY ./conf/nginx.repo /etc/yum.repos.d/nginx.repo
 
 RUN                                                                          \
-  yum -y install nginx-1.12.2 openssl --enablerepo=nginx                  && \
-  yum -y install https://repo.ius.io/ius-release-el7.rpm                  && \
-  yum -y install                                                             \
-    php71u-fpm                                                               \
-    php71u-cli                                                               \
-    php71u-mysqlnd                                                           \
-    php71u-soap                                                              \
-    php71u-xml                                                               \
-    php71u-zip                                                               \
-    php71u-json                                                              \
-    php71u-mcrypt                                                            \
-    php71u-mbstring                                                          \
-    php71u-zip                                                               \
-    php71u-gd                                                                \
-     --enablerepo=ius-archive && yum clean all
+   yum -y install epel-release                                     &&        \
+   yum -y update                                                   &&        \
+   yum -y install nginx                                            &&        \
+   yum -y install                                                            \
+    php-fpm                                                               \
+    php-cli                                                               \
+    php-mysqlnd                                                           \
+    php-soap                                                              \
+    php-xml                                                               \
+    php-zip                                                               \
+    php-json                                                              \
+#    php-mcrypt                                                            \
+    php-mbstring                                                          \
+    php-zip                                                               \
+    php-gd                                                           &&     \
+     yum clean all
 
 EXPOSE 80 443
 
@@ -31,3 +32,4 @@ RUN chmod +x /start.sh
 
 CMD /start.sh
 
+ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
